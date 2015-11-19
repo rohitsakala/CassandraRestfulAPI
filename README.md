@@ -31,7 +31,7 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 <code> [POST] http://127.0.0.1:5000/keyspaces/ </code>
 
-# Body
+#### Body
 
 - { 'name' : <name> , 'replicationFactor' : <number> }
 
@@ -39,7 +39,7 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 <code> [PUT] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
 
-# Body
+#### Body
 
 - { 'replicationFactor' : <number> }
 
