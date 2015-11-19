@@ -19,15 +19,15 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 ## Keyspaces
 
-* List all the Keyspaces
+### List all the Keyspaces
 
 <code> [GET] http://127.0.0.1:5000/keyspaces/ </code>
 
-* Get Info about a keyspace 
+### Get Info about a keyspace 
 
 <code> [GET] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
 
-* Creates a new keyspace
+### Creates a new keyspace
 
 <code> [POST] http://127.0.0.1:5000/keyspaces/ </code>
 
@@ -35,7 +35,7 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 	* { 'name' : <name> , 'replicationFactor' : <number> }
 
-* Updates the keyspace
+### Updates the keyspace
 
 <code> [PUT] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
 
@@ -43,7 +43,7 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 	* { 'replicationFactor' : <number> }
 
-- Deletes the keyspace
+### Deletes the keyspace
 
 <code> [DELETE] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
 
