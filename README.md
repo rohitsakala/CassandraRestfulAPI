@@ -60,3 +60,5 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 ### Deletes the keyspace
 
 <code> [DELETE] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
+
+Note:- 10.1.36.68 is the seed 
