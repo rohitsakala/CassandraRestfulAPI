@@ -132,16 +132,50 @@ def getNode(nodeid):
 
 @app.route('/nodes/', methods=['POST'])
 def createNode():
+	try:
+		cluster = Cluster()
+		session = cluster.connect('system')
+		data = request.data
+		dataDict = json.loads(data)
+		ip = dataDict['ip']
+		password = dataDict['password']
+		username = dataDict['username']
+		os.system("sshpass -p '" + password + "' scp addnode.sh " + username + "@" + ip + ":/home/" + username + "/")
+		os.system("sshpass -p '" + password + "' ssh " + username + "@" + ip + " 'echo " + password + " | bash addnode.sh " + username + "'")
+		return jsonify(status="success")
+	except:
+		return jsonify(error="Error adding node. Please check the configuration")
+
+@app.route('/nodes/<nodeid>', methods=['DELETE'])
+def deleteNode(nodeid):
 	cluster = Cluster()
 	session = cluster.connect('system')
+	rows = session.execute('select listen_address from local')
 	data = request.data
 	dataDict = json.loads(data)
-	ip = dataDict['ip']
 	password = dataDict['password']
 	username = dataDict['username']
-	os.system("sshpass -p '" + password + "' scp addnode.sh " + username + "@" + ip + ":/home/" + username + "/")
-	os.system("sshpass -p '" + password + "' ssh " + username + "@" + ip + " 'echo " + password + " | bash addnode.sh " + username + "'")
-	return "success"
-
+	info = {}
+	host = {}
+	c = 0
+	h = 0
+	for x in range(len(rows)):
+		info[c+1] = rows[x][0]
+		c=c+1
+	h = c
+	rows = session.execute('select peer,host_id from peers')
+	for x in range(len(rows)):
+		info[c+1] = rows[x][0]
+		host[c+1] = rows[x][1]
+		c=c+1
+	if int(nodeid) <= c and int(nodeid) > h:
+		os.system("sshpass -p '" + password + "' ssh " + username + "@" + info[int(nodeid)] + " ./dsc-cassandra-2.1.11/bin/nodetool decommission")
+		os.system("/home/rohitsakala/dsc-cassandra-2.1.11/bin/nodetool removenode " + str(host[int(nodeid)]))
+		return jsonify(status="Success")
+	elif int(nodeid) <= h:
+		return jsonify(error="host node cannot be deleted")
+	else:
+		return jsonify(error="No such nodeid")
+		
 if __name__ == '__main__':
 	app.run(debug=True)

@@ -23,13 +23,25 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 <code> [GET] http://127.0.0.1:5000/nodes/ </code>
 
+### Get info of a node
+
+<code> [GET] http://127.0.0.1:5000/nodes/<nodeid> </code>
+
 ### Creates a new node
 
 <code> [POST] http://127.0.0.1:5000/nodes/ </code>
 
 ##### Body
 
-        * { 'username' : <usernamename> , 'password' : <password>, 'ip' : <ip> }
+	* { 'username' : <username> , 'password' : <password>, 'ip' : <ip> }
+
+### Delete a node 
+
+<code> [DELETE] http://127.0.0.1:5000/nodes/<nodeid>
+
+##### Body
+	
+	* { 'username' : <username> , 'password' : <password> }
 
 ## Keyspaces
 
@@ -62,3 +74,5 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 <code> [DELETE] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
 
 Note:- 10.1.36.68 is the seed 
+Note:- In delete node code path is the directory where cassandra is installed
+
