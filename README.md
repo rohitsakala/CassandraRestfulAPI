@@ -17,6 +17,20 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 ## API's
 
+## Nodes
+
+### List all the nodes
+
+<code> [GET] http://127.0.0.1:5000/nodes/ </code>
+
+### Creates a new node
+
+<code> [POST] http://127.0.0.1:5000/nodes/ </code>
+
+##### Body
+
+        * { 'username' : <usernamename> , 'password' : <password>, 'ip' : <ip> }
+
 ## Keyspaces
 
 ### List all the Keyspaces

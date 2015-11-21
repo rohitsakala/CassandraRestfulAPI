@@ -8,6 +8,8 @@ import json
 import libvirt
 import os
 import sys
+from sh import ssh
+
 
 ######## Cassandra Import Statements ###########
 from cassandra.cluster import Cluster
@@ -88,6 +90,58 @@ def deleteKeyspace(keyspaceid):
 	 	return jsonify(status="Success")
 	else:
 		return jsonify(error="Not a valid keyspaceid")
+
+######################### Code related to adding machine to the cluster or increasing the nodes of the cluster #####################
+
+@app.route('/nodes/', methods=['GET'])
+def getNodes():
+	cluster = Cluster()
+	session = cluster.connect('system')
+	rows = session.execute('select listen_address from local')
+	info = {}
+	c = 0
+	for x in range(len(rows)):
+		info[c+1] = rows[x][0]
+		c=c+1
+	rows = session.execute('select peer from peers')
+	for x in range(len(rows)):
+		info[c+1] = rows[x][0]
+		c=c+1
+	return jsonify(Info=info)
+
+@app.route('/nodes/<nodeid>', methods=['GET'])
+def getNode(nodeid):
+	cluster = Cluster()
+	session = cluster.connect('system')
+	rows = session.execute('select listen_address from local')
+	info = {}
+	c = 0
+	for x in range(len(rows)):
+		info[c+1] = rows[x][0]
+		c=c+1
+	rows = session.execute('select peer from peers')
+	for x in range(len(rows)):
+		info[c+1] = rows[x][0]
+		c=c+1
+	if int(nodeid) <= c and int(nodeid) > 0:
+		data = {}
+		data['name'] = info[int(nodeid)]
+		return jsonify(Data=data)
+	else:
+		return jsonify(error="No such nodeid")
+
+@app.route('/nodes/', methods=['POST'])
+def createNode():
+	cluster = Cluster()
+	session = cluster.connect('system')
+	data = request.data
+	dataDict = json.loads(data)
+	ip = dataDict['ip']
+	password = dataDict['password']
+	username = dataDict['username']
+	os.system("sshpass -p '" + password + "' scp addnode.sh " + username + "@" + ip + ":/home/" + username + "/")
+	os.system("sshpass -p '" + password + "' ssh " + username + "@" + ip + " 'echo " + password + " | bash addnode.sh " + username + "'")
+	return "success"
 
 if __name__ == '__main__':
 	app.run(debug=True)
