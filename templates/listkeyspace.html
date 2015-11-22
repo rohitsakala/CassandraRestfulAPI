@@ -56,8 +56,9 @@ $(document).ready(function(){
             </nav>
             <h3 class="text-muted">Cassandra Browser</h3>
         </div>
-        <div class = "table-responsive">
-	       <h3>Select Keyspace : </h3>
+
+         <div class = "table-responsive">
+         <h3>Select Keyspace : </h3>
           <table class = "table table-hover">
             <thead>
             <tr>
@@ -67,9 +68,9 @@ $(document).ready(function(){
             </thead>
           <tbody>
             {% set x = 1 %}
-            {% for i in keyspaces %}
+            {% for i in pages %}
             <tr>
-    	         <td>{{ x }}</td>
+               <td>{{ x }}</td>
                <td><a href="/keyspaces/{{x}}">{{ i }}</a></td>
                {% set x = x + 1 %}
             </tr>
@@ -77,6 +78,38 @@ $(document).ready(function(){
           </tbody>
         </table>
       </div>
+
+      <nav class="pagination">
+        <ul class="pagination">
+          {% if pagination.has_prev %}
+            <li>
+              <a href="{{ url_for(section, page=pagination.page - 1) }}">&#8592;</a>
+            </li>
+          {% endif %}
+          {% for page in pagination.iter_pages() %}
+            {% if page %}
+                {% if page != pagination.page %}
+                <li>
+                    <a href="{{ url_for(section, page=page) }}">{{ page }}</a>
+                </li>
+                {% else %}
+                <li class="active">
+                    <a href="#">{{ page }}</a>
+                </li>
+                {% endif %}
+            {% else %}
+            <li>
+                <span>...</span>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+        <li>
+            <a href="{{ url_for(section, page=pagination.page + 1) }}">&#8594;</a>
+        </li>
+        {% endif %}
+       </ul>
+      </nav>
   
     <h3> Create a New Keyspace </h3>
     <br>
@@ -95,4 +128,5 @@ $(document).ready(function(){
     </footer>
     </div>
   </body>
+  <div class="modal_spin"></div>
 </html>

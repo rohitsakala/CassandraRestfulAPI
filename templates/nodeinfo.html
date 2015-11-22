@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Cassandra Browser</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+    <style type="text/css">
+    .modal_spin {
+      display:    none;
+      position:   fixed;
+      z-index:    1050;
+      top:        0;
+      left:       0;
+      height:     100%;
+      width:      100%;
+      background: rgba( 255, 255, 255, .8 ) 
+                  url('http://i.stack.imgur.com/FhHRx.gif') 
+                  50% 50% 
+                  no-repeat;
+    }
+    </style>
+
+<script>
+
+$(document).ready(function(){
+    $("#delNodeFunc").click(function(){
+      $(".modal_spin").css("display","block" );
+      $.ajax({
+        url: "/nodes/{{ info['nodeid'] }}",
+        type: "DELETE",
+        contentType: "application/json",
+        data: '{ "password" : "' + $('#inputPassword').val() + '", "username" : "' + $("#inputUsername").val() + '" }',
+        success: function(html){
+            $(location).attr('href', 'http://127.0.0.1:5000/nodes/')
+        }
+      });
+    });
+  });
+
+</script>  
+ 
+</head>
+ 
+<body>
+ 
+    <div class="container">
+        <div class="header">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation"><a href="/">Home</a>
+                    </li>
+                    <li role="presentation"><a href="#">Keyspaces</a>
+                    </li>
+                    <li role="presentation"  class="active"><a href="#">Nodes</a>
+                    </li>
+                </ul>
+            </nav>
+            <h3 class="text-muted">Cassandra Browser</h3>
+        </div>
+        <div class = "table-responsive">
+	       <h3>Machine</h3>
+          <table class = "table table-hover">
+            <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Value</th>
+            </tr>
+            </thead>
+          <tbody>
+            <tr>
+    	         <td><b>IP</b></td>
+               <td>{{ info['name'] }}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <div class="container">
+      <input type="text" id="inputUsername" class="form-control" placeholder="Username" required="" autofocus="">
+      <br>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" autofocus="">
+      <br>
+      <button id="delNodeFunc" type="button" class="btn btn-default">Remove Machine</button>
+	  </div>
+    <br>
+    <br>
+ 	  <footer class="footer">
+      <p>Team 15 &copy; Company 2015</p>
+    </footer>
+    </div>
+  </body>
+  <div class="modal_spin"></div>
+
+</html>
