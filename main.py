@@ -216,7 +216,7 @@ def createNode():
 		os.system("sshpass -p '" + password + "' ssh " + username + "@" + ip + " 'echo " + password + " | bash addnode.sh " + username + "'")
 		return jsonify(status="success")
 	except:
-		return jsonify(error="Error adding node. Please check the configuration")
+		return render_template('error.html',error="Error adding node. Please check the configuration")
 
 @app.route('/nodes/<nodeid>', methods=['DELETE'])
 def deleteNode(nodeid):
@@ -245,28 +245,35 @@ def deleteNode(nodeid):
 		os.system("/home/rohitsakala/dsc-cassandra-2.1.11/bin/nodetool removenode " + str(host[int(nodeid)]))
 		return jsonify(status="Success")
 	elif int(nodeid) <= h:
-		return jsonify(error="host node cannot be deleted")
+		return render_template('error.html',error="host node cannot be deleted")
 	else:
-		return jsonify(error="No such nodeid")
+		return render_template('error.html',error="No such nodeid")
 
 
-#################### Code related to Column Family operations ###################
+############################# Code related to Column Family operations ##############################
 
-@app.route('/keyspaces/<keyspaceid>/columnfamilys/', methods=['GET'])
-def getColumnFamilys(keyspaceid):
+@app.route('/keyspaces/<keyspaceid>/columnfamilys/', defaults={'page': 1}, methods=['GET'])
+@app.route('/keyspaces/<keyspaceid>/columnfamilys/page/<int:page>', methods=['GET'])
+def getColumnFamilys(page,keyspaceid):
 	cluster = Cluster()
 	session = cluster.connect('system')
 	rows = session.execute('select * from schema_keyspaces')
+	info = []
 	if int(keyspaceid) < (len(rows) + 1) and int(keyspaceid) > 0:
 		info = {}
 		info['name'] = rows[int(keyspaceid) -1][0]
 		rows = session.execute("SELECT * FROM schema_columnfamilies where keyspace_name='" + info['name'] + "'")
-		info = {}
+		info = []
 		for x in range(len(rows)):
-			info[x+1] = rows[x][1]
-		return jsonify(Data=info)
+			info.append(rows[x][1])
 	else:
-		return jsonify(error="Not a valid keyspaceid")
+		return render_template('error.html',error="Not a valid keyspaceid")
+	pages = info[(page-1)*PER_PAGE:PER_PAGE*page]
+    	if not pages and page != 1:
+   		abort(404)
+	pagination = Pagination(page, PER_PAGE, len(info))
+   	return render_template('listcolumnfamily.html',pagination=pagination,keyspaceid=keyspaceid,pages=pages,section = 'getColumnFamilys')
+		
 
 @app.route('/keyspaces/<keyspaceid>/columnfamilys/<columnfamilysid>', methods=['GET'])
 def getColumnFamilyInfo(keyspaceid,columnfamilysid):
@@ -280,34 +287,62 @@ def getColumnFamilyInfo(keyspaceid,columnfamilysid):
 		if int(columnfamilysid) <  (len(rows) + 1) and int(columnfamilysid) > 0:
 			info = {}
 			info['name'] = rows[int(columnfamilysid)-1][1]
-			return jsonify(Data=info)
+			info['caching'] = rows[int(columnfamilysid)-1][3]
+			info['cf_id'] = rows[int(columnfamilysid)-1][4]
+			info['columnfamilyid'] = columnfamilysid
+			return render_template('columnfamilyinfo.html',info=info,keyspaceid=keyspaceid)
 		else:
-			return jsonify(error="not a valid columnfamily")
+			return render_template('error.html',error="Not a valid columnfamilyid")
 	else:
-		return jsonify(error="Not a valid keyspaceid")
+		return render_template('error.html',error="Not a valid keyspaceid")
+
+@app.route('/keyspaces/<keyspaceid>/columnfamilys/<columnfamilysid>', methods=['DELETE'])
+def deleteColumnFamily(columnfamilysid,keyspaceid):
+	cluster = Cluster()
+	session = cluster.connect('system')
+	rows = session.execute('select * from schema_keyspaces')
+	if int(keyspaceid) < (len(rows) + 1) and int(keyspaceid) > 0:
+		info = {}
+		info['name'] = rows[int(keyspaceid) -1][0]
+		rows = session.execute("SELECT * FROM schema_columnfamilies where keyspace_name='" + info['name'] + "'")
+		if int(columnfamilysid) <  (len(rows) + 1) and int(columnfamilysid) > 0:
+			query = "DROP TABLE " + info["name"] + "." + rows[int(columnfamilysid) -1][1]
+			session.execute(query)
+	 		return jsonify(status="success")
+		else:
+			return render_template('error.html',error="Not a valid columnfamilyid")
+	else:
+		return render_template('error.html',error="Not a valid keyspaceid")
 
 @app.route('/keyspaces/<keyspaceid>/columnfamilys/', methods=['POST'])
 def createColumnFamily(keyspaceid):
 	cluster = Cluster()
 	session = cluster.connect('system')
-	rows = session.execute('select * from schema_keyspaces')
-	if int(keyspaceid) < (len(rows) + 1) and int(keyspaceid) > 0:
-		data = request.data
-		dataDict = json.loads(data)
-		columnName = dataDict['columnName']
-		username = dataDict['username']
+	data = request.data
+	dataDict = json.loads(data)
+	name = dataDict['name']
+	field1 = dataDict['field1']
+	field2 = dataDict['field2']
+	field3 = dataDict['field3']
+	field1_type = dataDict['field1_type']
+	field2_type = dataDict['field2_type']
+	field3_type = dataDict['field3_type']
+	if field1 == None or field2 ==  None or field3 == None or name == None:
+		return render_template('error.html',error="Fields are missing")
+	else:
+		rows = session.execute('select * from schema_keyspaces')
+		if int(keyspaceid) < (len(rows) + 1) and int(keyspaceid) > 0:
+			cluster = Cluster()
+			session = cluster.connect(rows[int(keyspaceid)-1][0])
+			query = "CREATE TABLE " + name + "( " + field1 + " " + field1_type + " PRIMARY KEY," + field2 + " " + field2_type  + " ," + field3 + " " + field3_type  + " )"
+			session.execute(query)
+			return redirect("http://127.0.0.1:5000/keyspaces/" + keyspaceid + "/columnfamilys/")
+		else:
+			return render_template('error.html',error="Not a valid keyspaceid")	
 
-#		info = {}
-#		info['name'] = rows[int(keyspaceid) -1][0]
-#		session.execute('USE ' + info['name'])
-		#rows = session.execute("CREATE TABLE " + columnName (
-		#							id uuid PRIMARY KEY,
-      #  title text,
-     #   album text,
-    #    artist text,
-   #     tags set<text>,
-  #      data blob
- #   );
+
+############################# Code related to Row Entry operations ##############################
+
 
 def url_for_other_page(page):
     args = request.view_args.copy()

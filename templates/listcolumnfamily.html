@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Cassandra Browser</title>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <style type="text/css">
+    .modal_spin {
+      display:    none;
+      position:   fixed;
+      z-index:    1050;
+      top:        0;
+      left:       0;
+      height:     100%;
+      width:      100%;
+      background: rgba( 255, 255, 255, .8 ) 
+                  url('http://i.stack.imgur.com/FhHRx.gif') 
+                  50% 50% 
+                  no-repeat;
+    }
+    </style>
+<script>
+
+$(document).ready(function(){
+    $("#cteColumnFamilyFunc").click(function(){
+      $(".modal_spin").css("display","block" );
+      $.ajax({
+        url: "/keyspaces/{{keyspaceid}}/columnfamilys/",
+        type: "POST",
+        contentType: "application/json",
+        data: '{ "name" : "' + $('#name').val() + '","field1" : "' + $('#field1').val() + '", "field2" : "' + $("#field2").val() + '", "field3" : "' + $("#field3").val() + '","field1_type" : "' + $('#field1_type').val() + '", "field2_type" : "' + $("#field2_type").val() + '", "field3_type" : "' + $("#field3_type").val() + '" }',
+        success: function(html){
+            $(".modal_spin").css("display","none" );
+            $(location).attr('href', 'http://127.0.0.1:5000/keyspaces/{{keyspaceid}}/columnfamilys/')
+        }
+      });
+    });
+  });
+
+</script>   
+</head>
+ 
+<body>
+ 
+    <div class="container">
+        <div class="header">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation"><a href="/">Home</a>
+                    </li>
+                    <li role="presentation"  class="active"><a href="#">Column Familys</a>
+                    </li>
+                </ul>
+            </nav>
+            <h3 class="text-muted">Cassandra Browser</h3>
+        </div>
+
+         <div class = "table-responsive">
+         <h3>Select Column Family : </h3>
+          <table class = "table table-hover">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Column Family Name</th>
+            </tr>
+            </thead>
+          <tbody>
+            {% set x = 1 %}
+            {% for i in pages %}
+            <tr>
+               <td>{{ x }}</td>
+               <td><a href="/keyspaces/{{keyspaceid}}/columnfamilys/{{x}}">{{ i }}</a></td>
+               {% set x = x + 1 %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <nav class="pagination">
+        <ul class="pagination">
+          {% if pagination.has_prev %}
+            <li>
+              <a href="{{ url_for(section, page=pagination.page - 1,keyspaceid=keyspaceid) }}">&#8592;</a>
+            </li>
+          {% endif %}
+          {% for page in pagination.iter_pages() %}
+            {% if page %}
+                {% if page != pagination.page %}
+                <li>
+                    <a href="{{ url_for(section, page=page, keyspaceid=keyspaceid) }}">{{ page }}</a>
+                </li>
+                {% else %}
+                <li class="active">
+                    <a href="#">{{ page }}</a>
+                </li>
+                {% endif %}
+            {% else %}
+            <li>
+                <span>...</span>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+        <li>
+            <a href="{{ url_for(section, page=pagination.page + 1,keyspaceid=keyspaceid) }}">&#8594;</a>
+        </li>
+        {% endif %}
+       </ul>
+      </nav>
+  
+    <h3> Create a New Column Family </h3>
+    <br>
+
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="exampleInputName2">Column Family Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Column Family name">
+    </div>
+  </form>
+
+  <br>
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="exampleInputName2">Field</label>
+      <input type="text" class="form-control" id="field1" placeholder="Field name">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail2">Data Type</label>
+      <input type="text" class="form-control" id="field1_type" placeholder="Data type">
+    </div>
+  </form>
+
+  <br>
+
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="exampleInputsdfName2">Field</label>
+      <input type="text" class="form-control" id="field2" placeholder="Field name">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail2">Data Type</label>
+      <input type="text" class="form-control" id="field2_type" placeholder="Data type">
+    </div>
+  </form>
+
+  <br>
+
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="exampleInputName2">Field</label>
+      <input type="text" class="form-control" id="field3" placeholder="College name">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail2">Data Type</label>
+      <input type="text" class="form-control" id="field3_type" placeholder="Data type">
+    </div>
+  </form>
+
+  <br>
+
+  <button type="button" class="btn btn-default">Add a field</button>
+
+  <br>
+  <br>
+
+  <div>
+    <button id="cteColumnFamilyFunc" type="button" class="btn btn-default">Create Column Family</button>
+  </div>
+
+    <br>
+    <br>
+ 	  <footer class="footer">
+      <p>Team 15 &copy; Company 2015</p>
+    </footer>
+    </div>
+  </body>
+  <div class="modal_spin"></div>
+</html>
