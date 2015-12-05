@@ -5,10 +5,6 @@
 
 **CassandraRestfulAPI** project exposes the cassandra data tables and nodes with the help of Restful API's. The project follows the standard Restful API rules. This project is developed as Major project of the Cloud Computing course by Team 15. The project is developed using Python Driver provided by Datastax using Flask framework.
 
-## Presentation 
-
-Link[http://www.slideshare.net/thakurakashkant/team-15-cloud-computing]
-
 ## Installation
 
 ### Flask
