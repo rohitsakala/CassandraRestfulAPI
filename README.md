@@ -3,7 +3,11 @@
 
 ## Description
 
-**CassandraRestfulAPI** project exposes the cassandra data tables with the help of Restful API's. The project follows the standard Restful API rules. This project is developed as Major project of the Cloud Computing course by Team 15. The project is developed using Python Driver provided by Datastax using Flask framework.
+**CassandraRestfulAPI** project exposes the cassandra data tables and nodes with the help of Restful API's. The project follows the standard Restful API rules. This project is developed as Major project of the Cloud Computing course by Team 15. The project is developed using Python Driver provided by Datastax using Flask framework.
+
+## Presentation 
+
+Link[http://www.slideshare.net/thakurakashkant/team-15-cloud-computing]
 
 ## Installation
 
@@ -17,6 +21,10 @@ Follow these steps to install [Cassandra](http://docs.datastax.com/en/cassandra/
 ### Python Cassandra Driver
 
 Follow these steps to install python cassandra driver [Python Driver Cassandra](https://datastax.github.io/python-driver/installation.html)
+
+## Run the code
+
+First is to start cassandra. Second is to run flask i.e <code>python main.py</code>. Go to https:127:0.0.1:5000/ and use the following API's.
 
 ## API's
 
@@ -96,7 +104,7 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 ### Delete a column family 
 
-<code> [DELETE] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid> <nodeid>
+<code> [DELETE] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid> <code>
 
 ## --- Row Entries ---
 
@@ -120,6 +128,9 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 <code> [DELETE] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/<entryname> </code>
 
-Note:- 10.1.36.68 is the seed 
-Note:- In delete node code, path is the directory where cassandra is installed
+######Note:- 10.1.36.68 is the seed 
+######Note:- In delete node code, path is the directory where cassandra is installed
 
+##More Info
+
+Mail :- rohitsakala@gmail.com
