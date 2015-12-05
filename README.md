@@ -32,7 +32,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ### Get info of a node
 
-<code> [GET] http://127.0.0.1:5000/nodes/<nodeid> </code>
+<code> [GET] http://127.0.0.1:5000/nodes/nodeid </code>
 
 ### Creates a new node
 
@@ -44,7 +44,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ### Delete a node 
 
-<code> [DELETE] http://127.0.0.1:5000/nodes/<nodeid>
+<code> [DELETE] http://127.0.0.1:5000/nodes/nodeid </code>
 
 ##### Body
 	
@@ -58,7 +58,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ### Get Info about a keyspace 
 
-<code> [GET] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
+<code> [GET] http://127.0.0.1:5000/keyspaces/keyspaceid </code>
 
 ### Creates a new keyspace
 
@@ -70,7 +70,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ### Updates the keyspace
 
-<code> [PUT] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
+<code> [PUT] http://127.0.0.1:5000/keyspaces/keyspaceid </code>
 
 ##### Body
 
@@ -78,21 +78,21 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ### Deletes the keyspace
 
-<code> [DELETE] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
+<code> [DELETE] http://127.0.0.1:5000/keyspaces/keyspaceid </code>
 
 ## ---  Column Family ---
 
 ### List all the column families of a keyspace
 
-<code> [GET] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/ </code>
+<code> [GET] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/ </code>
 
 ### Get info of a column family
 
-<code> [GET] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid> </code>
+<code> [GET] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid </code>
 
 ### Creates a new column family
 
-<code> [POST] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/ </code>
+<code> [POST] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/ </code>
 
 ##### Body
 
@@ -100,21 +100,21 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ### Delete a column family 
 
-<code> [DELETE] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid> </code>
+<code> [DELETE] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid </code>
 
 ## --- Row Entries ---
 
 ### List all the rows
 
-<code> [GET] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/ </code>
+<code> [GET] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid/entrys/ </code>
 
 ### Get Info about a row
 
-<code> [GET] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/<entryname> </code>
+<code> [GET] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid/entrys/entryname </code>
 
 ### Creates a new row
 
-<code> [POST] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/ </code>
+<code> [POST] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid/entrys/ </code>
 
 ##### Body
 
@@ -122,7 +122,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ### Deletes the row
 
-<code> [DELETE] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/<entryname> </code>
+<code> [DELETE] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid/entrys/entryname </code>
 
 ######Note:- 10.1.36.68 is the seed 
 ######Note:- In delete node code, path is the directory where cassandra is installed
