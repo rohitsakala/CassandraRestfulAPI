@@ -11,6 +11,7 @@ from math import ceil
 import json
 import libvirt
 import os
+import numpy
 import sys
 from sh import ssh
 
@@ -343,6 +344,116 @@ def createColumnFamily(keyspaceid):
 
 ############################# Code related to Row Entry operations ##############################
 
+@app.route('/keyspaces/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/', defaults={'page': 1}, methods=['GET'])
+@app.route('/keyspaces/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/page/<int:page>', methods=['GET'])
+def getEntrys(page,keyspaceid,columnfamilyid):
+	cluster = Cluster()
+	session = cluster.connect('system')
+	rows = session.execute('select * from schema_keyspaces')
+	info = []
+	if int(keyspaceid) < (len(rows) + 1) and int(keyspaceid) > 0:
+		info = {}
+		info['name'] = rows[int(keyspaceid) -1][0]
+		keyspacename = rows[int(keyspaceid) -1][0]
+		rows = session.execute("SELECT * FROM schema_columnfamilies where keyspace_name='" + info['name'] + "'")
+		columnfamilyname = rows[int(columnfamilyid)-1][1]
+		session = cluster.connect(rows[int(keyspaceid)-1][0])
+		rows = session.execute("SELECT * FROM " + columnfamilyname)
+		info = rows
+		rows = session.execute("SELECT * FROM system.schema_columns WHERE keyspace_name = '" + keyspacename + "' AND columnfamily_name = '" + columnfamilyname + "'")
+		fields = []
+		for i in rows:
+			fields.append(i)
+		temp = fields[len(rows) - 1]
+		fields[len(rows) - 1] = fields[0]
+		fields[0] = temp
+		temp = fields[1]
+		fields[1] = fields[2]
+		fields[2] = temp
+	else:
+		return render_template('error.html',error="Not a valid keyspaceid")
+	pages = info[(page-1)*PER_PAGE:PER_PAGE*page]
+    	if not pages and page != 1:
+   		abort(404)
+	pagination = Pagination(page, PER_PAGE, len(info))
+   	return render_template('listentrys.html',pagination=pagination,keyspaceid=keyspaceid,columnfamilyid=columnfamilyid,pages=pages,fields=fields,section = 'getEntrys')
+
+@app.route('/keyspaces/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/',methods=['POST'])
+def createEntry(keyspaceid,columnfamilyid):
+	cluster = Cluster()
+	session = cluster.connect('system')
+	rows = session.execute('select * from schema_keyspaces')
+	info = []
+	if int(keyspaceid) < (len(rows) + 1) and int(keyspaceid) > 0:
+		info = {}
+		info['name'] = rows[int(keyspaceid) -1][0]
+		keyspacename = rows[int(keyspaceid) -1][0]
+		rows = session.execute("SELECT * FROM schema_columnfamilies where keyspace_name='" + info['name'] + "'")
+		columnfamilyname = rows[int(columnfamilyid)-1][1]
+		session = cluster.connect(rows[int(keyspaceid)-1][0])
+		data = request.data
+		dataDict = json.loads(data)
+		fields = dataDict.keys()
+		values = []
+		for key, value in dataDict.items():
+    			values.append(value)
+		rows = session.execute("INSERT INTO " + columnfamilyname + " (" + fields[0] + ", " + fields[1] + ", " + fields[2] + ") VALUES('" + values[0] + "', '" + values[1] + "', '" + values[2] + "')") 
+	else:
+		return render_template('error.html',error="Not a valid keyspaceid")
+	return "success"
+
+@app.route('/keyspaces/<keyspaceid>/columnfamilys/<columnfamilyid>/entrys/<entryname>', methods=['GET'])
+def getEntrysInfo(keyspaceid,columnfamilyid,entryname):
+	cluster = Cluster()
+	session = cluster.connect('system')
+	rows = session.execute('select * from schema_keyspaces')
+	info = []
+	if int(keyspaceid) < (len(rows) + 1) and int(keyspaceid) > 0:
+		info = {}
+		info['name'] = rows[int(keyspaceid) -1][0]
+		keyspacename = rows[int(keyspaceid) -1][0]
+		rows = session.execute("SELECT * FROM schema_columnfamilies where keyspace_name='" + info['name'] + "'")
+		columnfamilyname = rows[int(columnfamilyid)-1][1]
+		primarykey = rows[int(columnfamilyid)-1]
+		session = cluster.connect(rows[int(keyspaceid)-1][0])
+		primarykey = primarykey[17][2:]
+		primarykey = primarykey[:-2]
+		query = "SELECT * FROM " + columnfamilyname + " WHERE " + primarykey + "='" + entryname + "'"
+		rows = session.execute(query)
+		info = rows
+		query = "SELECT * FROM system.schema_columns WHERE keyspace_name='" + keyspacename + "' AND columnfamily_name = '" + columnfamilyname + "'"
+		rows = session.execute(query)
+		fields = []
+		for i in rows:
+			fields.append(i)
+		temp = fields[len(rows) - 1]
+		fields[len(rows) - 1] = fields[0]
+		fields[0] = temp
+		temp = fields[1]
+		fields[1] = fields[2]
+		fields[2] = temp
+		return render_template('entryinfo.html',info=info,fields=fields,keyspaceid=keyspaceid,columnfamilyid=columnfamilyid,entryname=entryname)
+		
+
+@app.route('/keyspaces/<keyspaceid>/columnfamilys/<columnfamilysid>/entrys/<entryname>', methods=['DELETE'])
+def deleteEntry(columnfamilysid,keyspaceid,entryname):
+	cluster = Cluster()
+	session = cluster.connect('system')
+	rows = session.execute('select * from schema_keyspaces')
+	info = []
+	if int(keyspaceid) < (len(rows) + 1) and int(keyspaceid) > 0:
+		info = {}
+		info['name'] = rows[int(keyspaceid) -1][0]
+		keyspacename = rows[int(keyspaceid) -1][0]
+		rows = session.execute("SELECT * FROM schema_columnfamilies where keyspace_name='" + info['name'] + "'")
+		columnfamilyname = rows[int(columnfamilysid)-1][1]
+		primarykey = rows[int(columnfamilysid)-1]
+		session = cluster.connect(rows[int(keyspaceid)-1][0])
+		primarykey = primarykey[17][2:]
+		primarykey = primarykey[:-2]
+		query = "DELETE FROM " + columnfamilyname + " WHERE " + primarykey + "='" + entryname + "'"
+		rows = session.execute(query)
+		return "success"
 
 def url_for_other_page(page):
     args = request.view_args.copy()
@@ -350,7 +461,6 @@ def url_for_other_page(page):
     return url_for(request.endpoint, **args)
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
-
 
 
 if __name__ == '__main__':

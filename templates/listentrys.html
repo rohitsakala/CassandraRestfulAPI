@@ -24,16 +24,16 @@
 <script>
 
 $(document).ready(function(){
-    $("#cteColumnFamilyFunc").click(function(){
+    $("#cteEntryFunc").click(function(){
       $(".modal_spin").css("display","block" );
       $.ajax({
-        url: "/keyspaces/{{keyspaceid}}/columnfamilys/",
+        url: "/keyspaces/{{keyspaceid}}/columnfamilys/{{columnfamilyid}}/entrys/",
         type: "POST",
         contentType: "application/json",
-        data: '{ "name" : "' + $('#name').val() + '","field1" : "' + $('#field1').val() + '", "field2" : "' + $("#field2").val() + '", "field3" : "' + $("#field3").val() + '","field1_type" : "' + $('#field1_type').val() + '", "field2_type" : "' + $("#field2_type").val() + '", "field3_type" : "' + $("#field3_type").val() + '" }',
+        data: '{ "{{fields[0][2]}}" : "' + $('#{{fields[0][2]}}').val() + '", "{{fields[1][2]}}" : "' + $("#{{fields[1][2]}}").val() + '", "{{fields[2][2]}}" : "' + $("#{{fields[2][2]}}").val() + '" }',
         success: function(html){
             $(".modal_spin").css("display","none" );
-            $(location).attr('href', 'http://127.0.0.1:5000/keyspaces/{{keyspaceid}}/columnfamilys/')
+            $(location).attr('href', 'http://127.0.0.1:5000/keyspaces/{{keyspaceid}}/columnfamilys/{{columnfamilyid}}/entrys/')
         }
       });
     });
@@ -50,7 +50,7 @@ $(document).ready(function(){
                 <ul class="nav nav-pills pull-right">
                     <li role="presentation"><a href="/">Home</a>
                     </li>
-                    <li role="presentation"  class="active"><a href="#">Column Familys</a>
+                    <li role="presentation"  class="active"><a href="#">Entries</a>
                     </li>
                 </ul>
             </nav>
@@ -58,12 +58,14 @@ $(document).ready(function(){
         </div>
 
          <div class = "table-responsive">
-         <h3>Select Column Family : </h3>
+         <h3>Select Entries : </h3>
           <table class = "table table-hover">
             <thead>
             <tr>
-              <th>#</th>
-              <th>Column Family Name</th>
+            <th> S.No </th>
+            {% for i in fields %}
+            <th>{{i[2]}}</th>
+            {% endfor %}
             </tr>
             </thead>
           <tbody>
@@ -71,7 +73,9 @@ $(document).ready(function(){
             {% for i in pages %}
             <tr>
                <td>{{ x }}</td>
-               <td><a href="/keyspaces/{{keyspaceid}}/columnfamilys/{{x}}">{{ i }}</a></td>
+               {% for y in range(3) %}
+               <td><a href="/keyspaces/{{keyspaceid}}/columnfamilys/{{columnfamilyid}}/entrys/{{i[0]}}">{{ i[y] }}</a></td>
+               {% endfor %}
                {% set x = x + 1 %}
             </tr>
             {% endfor %}
@@ -83,14 +87,14 @@ $(document).ready(function(){
         <ul class="pagination">
           {% if pagination.has_prev %}
             <li>
-              <a href="{{ url_for(section, page=pagination.page - 1,keyspaceid=keyspaceid) }}">&#8592;</a>
+              <a href="{{ url_for(section, page=pagination.page - 1,keyspaceid=keyspaceid,columnfamilyid=columnfamilyid) }}">&#8592;</a>
             </li>
           {% endif %}
           {% for page in pagination.iter_pages() %}
             {% if page %}
                 {% if page != pagination.page %}
                 <li>
-                    <a href="{{ url_for(section, page=page, keyspaceid=keyspaceid) }}">{{ page }}</a>
+                    <a href="{{ url_for(section, page=page, keyspaceid=keyspaceid,columnfamilyid=columnfamilyid) }}">{{ page }}</a>
                 </li>
                 {% else %}
                 <li class="active">
@@ -105,69 +109,32 @@ $(document).ready(function(){
         {% endfor %}
         {% if pagination.has_next %}
         <li>
-            <a href="{{ url_for(section, page=pagination.page + 1,keyspaceid=keyspaceid) }}">&#8594;</a>
+            <a href="{{ url_for(section, page=pagination.page + 1,keyspaceid=keyspaceid,columnfamilyid=columnfamilyid) }}">&#8594;</a>
         </li>
         {% endif %}
        </ul>
       </nav>
   
-    <h3> Create a New Column Family </h3>
+    <h3> Create a New Entry </h3>
     <br>
 
-  <form class="form-inline">
-    <div class="form-group">
-      <label for="exampleInputName2">Column Family Name</label>
-      <input type="text" class="form-control" id="name" placeholder="Column Family name">
-    </div>
-  </form>
+{% for i in fields %}
 
   <br>
   <form class="form-inline">
     <div class="form-group">
-      <label for="exampleInputName2">Field</label>
-      <input type="text" class="form-control" id="field1" placeholder="Field name">
-    </div>
-    <div class="form-group">
-      <label for="exampleInputEmail2">Data Type</label>
-      <input type="text" class="form-control" id="field1_type" placeholder="Data type">
-    </div>
-  </form>
-
-  <br>
-
-  <form class="form-inline">
-    <div class="form-group">
-      <label for="exampleInputsdfName2">Field</label>
-      <input type="text" class="form-control" id="field2" placeholder="Field name">
-    </div>
-    <div class="form-group">
-      <label for="exampleInputEmail2">Data Type</label>
-      <input type="text" class="form-control" id="field2_type" placeholder="Data type">
+      <div>
+      <label for="exampleInputName2">{{i[2]}}</label>
+      </div>
+      <br>
+      <input type="text" class="form-control" id="{{i[2]}}" placeholder="{{i[2]}} value">
     </div>
   </form>
 
+{% endfor %}
   <br>
-
-  <form class="form-inline">
-    <div class="form-group">
-      <label for="exampleInputName2">Field</label>
-      <input type="text" class="form-control" id="field3" placeholder="Field name">
-    </div>
-    <div class="form-group">
-      <label for="exampleInputEmail2">Data Type</label>
-      <input type="text" class="form-control" id="field3_type" placeholder="Data type">
-    </div>
-  </form>
-
-  <br>
-
-  <button type="button" class="btn btn-default">Add a field</button>
-
-  <br>
-  <br>
-
   <div>
-    <button id="cteColumnFamilyFunc" type="button" class="btn btn-default">Create Column Family</button>
+    <button id="cteEntryFunc" type="button" class="btn btn-default">Create Entry</button>
   </div>
 
     <br>
