@@ -100,7 +100,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ### Delete a column family 
 
-<code> [DELETE] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid> <code>
+<code> [DELETE] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid> </code>
 
 ## --- Row Entries ---
 
@@ -130,3 +130,4 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 ##More Info
 
 Mail :- rohitsakala@gmail.com
+
