@@ -13,11 +13,14 @@
 
 ### Cassandra
 
+Follow these steps to install [Cassandra](http://docs.datastax.com/en/cassandra/2.1/cassandra/install/installTarball_t.html)
+### Python Cassandra Driver
+
 Follow these steps to install python cassandra driver [Python Driver Cassandra](https://datastax.github.io/python-driver/installation.html)
 
 ## API's
 
-## Nodes
+## --- Nodes ---
 
 ### List all the nodes
 
@@ -43,7 +46,7 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 	
 	* { 'username' : <username> , 'password' : <password> }
 
-## Keyspaces
+## --- Keyspaces ---
 
 ### List all the Keyspaces
 
@@ -73,7 +76,7 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 <code> [DELETE] http://127.0.0.1:5000/keyspaces/<keyspaceid> </code>
 
-## Column Family
+## ---  Column Family ---
 
 ### List all the column families of a keyspace
 
@@ -95,7 +98,7 @@ Follow these steps to install python cassandra driver [Python Driver Cassandra](
 
 <code> [DELETE] http://127.0.0.1:5000/keyspace/<keyspaceid>/columnfamilys/<columnfamilyid> <nodeid>
 
-## Row Entries
+## --- Row Entries ---
 
 ### List all the rows
 
