@@ -99,7 +99,7 @@ def getKeyspaceInfo(keyspaceid):
 		info['keyspaceid'] = int(keyspaceid)
 		if info['name'] == "system":
 			info['replication_factor'] = 0
-			return jsonify(keyspace=info)
+			return render_template('keyspaceinfo.html',info=info)
 		info['replication_factor'] = rows[int(keyspaceid) -1][3]
 		return render_template('keyspaceinfo.html',info=info)
 	else:
