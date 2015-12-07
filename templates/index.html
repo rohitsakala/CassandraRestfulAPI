@@ -1,39 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
- 
-<head>
-    <title>Cassandra Browser</title>
- 
- 
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+
+    <title>Cassandra UI</title>
+
+    <!-- Bootstrap core CSS -->
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
- 
-    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
- 
- 
-</head>
- 
-<body>
- 
-    <div class="container">
-        <div class="header">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="#">Home</a>
-                    </li>
-                    <li role="presentation"><a href="keyspace/list">KeySpaces</a>
-                    </li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">Cassandra Browser</h3>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Cassandra RestAPI</a>
         </div>
- 
-        
- 
-        <footer class="footer">
-            <p>&copy; Company 2015</p>
-        </footer>
- 
-    </div>
-</body>
- 
+       <!-- <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#">KeySpaces</a></li>
+          </ul>
+        </div>/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Project Description</h1>
+        <p class="lead">
+          To provide a web-based UI based on REST API for an user to manage Cassandra data tables and nodes using python with the following functionalities :
+        <ul class="list-group">
+            <li class="list-group-item">1. Operation on keyspace,creating a keyspace, retrieving information about the keyspaces, dropping keyspaces and list keyspaces.</li>
+            <li class="list-group-item">2. Operations on column family creating a column family, get description of a column family, dropping column families and list column families. </li>
+            <li class="list-group-item">3. Rows Operations Implementing a tool for inserting rows, deleting rows, retrieving them and list them. </li>
+            <li class="list-group-item">4. Node Operations Implementing a tool for adding machines, removing machines, list machines. </li>
+            <li class="list-group-item">5. Pagination, Showing the query result from cassandra with pagination for all the above queries.</li>
+        </ul>
+        </p>
+      </div>
+
+
+        <div class="starter-template">
+        <h2>Link to Web Based Operations</h2>
+        <br>
+        <a href="/keyspaces/"><h3> -- Cassandra Browser Tool</h3></a>
+        <br>
+      </div>
+
+
+
+      <div class="starter-template">
+        <h2>API's Provided</h2>
+        <ul class="list-group">
+            <li class="list-group-item"><h3> KeySpaces  </h3></li>
+            <li class="list-group-item"><h4> List all the Keyspaces </h4></li>
+            <li class="list-group-item"> <a href="#"> [GET] http://127.0.0.1:5000/keyspaces/</a> </li>
+            <li class="list-group-item"><h4>  Get Info about a keyspace  </h4></li>
+            <li class="list-group-item"> <a href="#"> [GET] http://127.0.0.1:5000/keyspaces/keyspaceid </a></li>
+            <li class="list-group-item"><h4>  Creates a new keyspace  </h4></li>
+            <li class="list-group-item"> <a href="#/"> [POST] http://127.0.0.1:5000/keyspaces/ </a><br> Body - { 'name' : name , 'replicationFactor' : number } </li>
+            <li class="list-group-item"><h4>  Deletes the keyspace  </h4></li>
+            <li class="list-group-item"> <a href="#"> [DELETE] http://127.0.0.1:5000/keyspaces/keyspaceid  </a></li>
+        </ul>
+        <br>
+        <br>
+            <ul class="list-group">
+            <li class="list-group-item"><h3> Nodes  </h3></li>
+            <li class="list-group-item"><h4> List all the nodes </h4></li>
+            <li class="list-group-item"> <a href="#"> [GET] http://127.0.0.1:5000/nodes/</a> </li>
+            <li class="list-group-item"><h4>  Get Info about a node  </h4></li>
+            <li class="list-group-item"> <a href="#"> [GET] http://127.0.0.1:5000/nodes/nodeid </a></li>
+            <li class="list-group-item"><h4>  Creates a new node  </h4></li>
+            <li class="list-group-item"> <a href="#"> [POST] http://127.0.0.1:5000/nodes/ </a><br> Body - { 'username' : username , 'password' : password , 'ip' : ip } </li>
+            <li class="list-group-item"><h4>  Deletes the node  </h4></li>
+            <li class="list-group-item"> <a href="#"> [DELETE] http://127.0.0.1:5000/nodes/1  </a></li>
+        </ul>
+        <br>
+        <br>
+            <ul class="list-group">
+            <li class="list-group-item"><h3> Column Families  </h3></li>
+            <li class="list-group-item"><h4> List all the column families </h4></li>
+            <li class="list-group-item"> <a href="#"> [GET] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/ </a> </li>
+            <li class="list-group-item"><h4>  Get Info about a column family  </h4></li>
+            <li class="list-group-item"> <a href="#"> [GET] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid </a></li>
+            <li class="list-group-item"><h4>  Creates a new column family  </h4></li>
+            <li class="list-group-item"> <a href="#"> [POST] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/ </a><br> Body - { 'name' : name } </li>
+            <li class="list-group-item"><h4>  Deletes the column family  </h4></li>
+            <li class="list-group-item"> <a href="#"> [DELETE] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid  </a></li>
+        </ul>
+        <br>
+        <br>
+            <ul class="list-group">
+            <li class="list-group-item"><h3> Rows  </h3></li>
+            <li class="list-group-item"><h4> List all the rows </h4></li>
+            <li class="list-group-item"> <a href="#"> [GET] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid/entrys/</a> </li>
+            <li class="list-group-item"><h4>  Get Info about a row  </h4></li>
+            <li class="list-group-item"> <a href="#"> [GET] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid/entrys/entryname </a></li>
+            <li class="list-group-item"><h4>  Creates a new row </h4></li>
+            <li class="list-group-item"> <a href="#"> [POST] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid/entrys/ </a><br> Body - { 'field1' : field name , 'field1_type' : field data type .... } </li>
+            <li class="list-group-item"><h4>  Deletes the row </h4></li>
+            <li class="list-group-item"> <a href="#"> [DELETE] http://127.0.0.1:5000/keyspace/keyspaceid/columnfamilys/columnfamilyid/entrys/entryname  </a></li>
+        </ul>
+      
+      </div>
+
+
+
+      <div class="starter-template">
+        <h2>Contributors</h2>
+        <ul class="list-group">
+            <li class="list-group-item">SVK Rohit</li>
+            <li class="list-group-item">Akash Kant Thakur</li>
+            <li class="list-group-item">Mihir </li>
+            <li class="list-group-item">Vinayak</li>
+        </ul>
+        </p>
+      </div>
+
+
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="http://getbootstrap.com/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>

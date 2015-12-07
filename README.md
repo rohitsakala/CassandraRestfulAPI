@@ -40,7 +40,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ##### Body
 
-	* { 'username' : <username> , 'password' : <password>, 'ip' : <ip> }
+	* { 'username' : username , 'password' : password, 'ip' : ip }
 
 ### Delete a node 
 
@@ -48,7 +48,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ##### Body
 	
-	* { 'username' : <username> , 'password' : <password> }
+	* { 'username' : username , 'password' : password }
 
 ## --- Keyspaces ---
 
@@ -66,7 +66,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ##### Body
 
-	* { 'name' : <name> , 'replicationFactor' : <number> }
+	* { 'name' : name , 'replicationFactor' : number }
 
 ### Updates the keyspace
 
@@ -74,7 +74,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ##### Body
 
-	* { 'replicationFactor' : <number> }
+	* { 'replicationFactor' : number }
 
 ### Deletes the keyspace
 
@@ -96,7 +96,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ##### Body
 
-	* { 'name' : <name> }
+	* { 'name' : name }
 
 ### Delete a column family 
 
@@ -118,7 +118,7 @@ First is to start cassandra. Second is to run flask i.e <code>python main.py</co
 
 ##### Body
 
-	* { 'field1' : <field name> , 'field1_type' : <field data type> .... }
+	* { 'field1' : field name , 'field1_type' : field data type .... }
 
 ### Deletes the row
 

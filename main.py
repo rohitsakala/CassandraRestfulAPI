@@ -69,7 +69,7 @@ class Pagination(object):
 
 @app.route('/')
 def index():
-	return "Cloud Main Project - Exposing Cassandra Data Tables are Restful API's"
+   	return render_template('index.html')
 
 ####################### Code related to KeySpace Operations #######################
 
