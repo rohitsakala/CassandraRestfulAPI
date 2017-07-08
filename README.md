@@ -18,6 +18,11 @@ Follow these steps to install [Cassandra](http://docs.datastax.com/en/cassandra/
 
 Follow these steps to install python cassandra driver [Python Driver Cassandra](https://datastax.github.io/python-driver/installation.html)
 
+### Other Dependencies
+
+<code> sudo pip install flask-mongoengine </code>
+<code> sudo pip install -U flask_paginate </code>
+
 ## Run the code
 
 First is to start cassandra. Second is to run flask i.e <code>python main.py</code>. Go to https:127:0.0.1:5000/ and use the following API's.
